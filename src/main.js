@@ -2,6 +2,8 @@ import kaboom from "kaboom"
 kaboom()
 
 loadSprite("bean", "/sprites/plane.png")
+loadSprite("bean20", "/sprites/plane_20.png")
+loadSprite("bean-20", "/sprites/plane_-20.png")
 loadSound("score", "/sounds/score.mp3")
 loadSound("wooosh", "/sounds/wooosh.mp3")
 loadSound("hit", "/sounds/hit.mp3")
@@ -53,7 +55,10 @@ scene("game", () => {
 	onKeyPress("space", () => {
 		bean.jump(JUMP_FORCE);
 		play("wooosh");
-		bean.rotate += 45; // Rotate the bean by 45 degrees
+		bean.use(sprite("bean20"));
+		setTimeout(() => {
+			bean.use(sprite("bean"));
+		}, 200);
 	});
 
 	onGamepadButtonPress("south", () => {
@@ -67,7 +72,7 @@ scene("game", () => {
 		play("wooosh")
 	})
 
-	let pipeSpawnDelay = 1.2; // Initial delay in seconds between pipe spawns
+	let pipeSpawnDelay = 1.3; // Initial delay in seconds between pipe spawns
 
 	function spawnPipe() {
 		// calculate pipe positions
