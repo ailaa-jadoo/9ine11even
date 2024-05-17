@@ -241,6 +241,6 @@ scene("lose", (score) => {
 
 })
 
-debug.inspect = true
+// debug.inspect = true
 
 go("game")
