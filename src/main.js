@@ -12,6 +12,8 @@ loadSound("hit", "/sounds/hit.mp3")
 loadSprite("background", "/sprites/city.png");
 // loadSprite("WTCbackground", "/sprites/WTO.png");
 loadSprite("WTCbackground", "/sprites/boom.png");
+loadSprite("building", "/sprites/buildin.png");
+loadSprite("buildingRotated", "/sprites/buildin-rotated.png");
 
 // define gravity
 setGravity(3200)
@@ -32,29 +34,22 @@ scene("game", () => {
 		timer(),
 	])
 
-	const PIPE_OPEN = 360
+	const PIPE_OPEN = 500
 	const PIPE_MIN = 100
 	const JUMP_FORCE = 800
 	const SPEED = 320
 	const CEILING = -60
 
-	// a game object consists of a list of components and tags
 	const bean = game.add([
-		// sprite() means it's drawn with a sprite of name "bean" (defined above in 'loadSprite')
 		sprite("bean"),
-		// give it a position
 		pos(width() / 4, 0),
 		scale(0.5),
-		// give it a collider
 		area(),
-		// body component enables it to fall and jump in a gravity world
 		body(),
 	])
 
-	// check for fall death
 	bean.onUpdate(() => {
 		if (bean.pos.y >= height() || bean.pos.y <= CEILING) {
-			// switch to "lose" scene
 			go("lose", score)
 		}
 	})
@@ -90,33 +85,33 @@ scene("game", () => {
 	function spawnPipe() {
 		// calculate pipe positions
 		const h1 = rand(PIPE_MIN, height() - PIPE_MIN - PIPE_OPEN);
+		const randNum = rand(100, 200);
 		const h2 = height() - h1 - PIPE_OPEN;
-
+	
+		// Add the bottom building sprite
 		game.add([
-			pos(width(), 0),
-			rect(64, h1),
-			color(0, 127, 255),
-			outline(4),
+			pos(width(), -randNum),
+			sprite("buildingRotated"),
 			area(),
 			move(LEFT, SPEED),
 			offscreen({ destroy: true }),
 			"pipe",
 		]);
-
+	
+		// Add the top rotated building sprite
 		game.add([
 			pos(width(), h1 + PIPE_OPEN),
-			rect(64, h2),
-			color(0, 127, 255),
-			outline(4),
+			sprite("building"),
 			area(),
 			move(LEFT, SPEED),
 			offscreen({ destroy: true }),
 			"pipe",
 			{ passed: false },
 		]);
-
+	
 		pipeSpawnDelay += 0.1; // Increase the delay for next pipe spawn
 	}
+	
 
 	// spawn a pipe with a delay
 	game.loop(pipeSpawnDelay, () => {
