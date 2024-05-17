@@ -14,7 +14,7 @@ loadSprite("background", "/sprites/city.png");
 loadSprite("WTCbackground", "/sprites/boom.png");
 loadSprite("building", "/sprites/buildin.png");
 loadSprite("buildingRotated", "/sprites/buildin-rotated.png");
-
+loadSound("hit", "/sounds/ollahuobkar.mp3")
 // define gravity
 setGravity(3200)
 
@@ -72,12 +72,20 @@ scene("game", () => {
 	onGamepadButtonPress("south", () => {
 		bean.jump(JUMP_FORCE)
 		play("wooosh")
+		bean.use(sprite("bean20"));
+		setTimeout(() => {
+			bean.use(sprite("bean"));
+		}, 200);
 	})
 
 	// mobile
 	onClick(() => {
 		bean.jump(JUMP_FORCE)
 		play("wooosh")
+		bean.use(sprite("bean20"));
+		setTimeout(() => {
+			bean.use(sprite("bean"));
+		}, 200);
 	})
 
 	let pipeSpawnDelay = 1.5; // Initial delay in seconds between pipe spawns
@@ -119,11 +127,21 @@ scene("game", () => {
 	});
 
 	// callback when bean onCollide with objects with tag "pipe"
+	// bean.onCollide("pipe", () => {
+	// 	go("lose", score)
+	// 	play("hit")
+	// 	addKaboom(bean.pos)
+	// })
 	bean.onCollide("pipe", () => {
-		go("lose", score)
-		play("hit")
-		addKaboom(bean.pos)
-	})
+		// Pause the game
+		game.paused = true;
+		play("hit");
+		addKaboom(bean.pos);
+		wait(0.2, () => {
+			game.paused = false;
+			go("lose", score);
+		});
+	});
 
 	// per frame event for all objects with tag 'pipe'
 	onUpdate("pipe", (p) => {
@@ -223,6 +241,6 @@ scene("lose", (score) => {
 
 })
 
-// debug.inspect = true
+debug.inspect = true
 
 go("game")
