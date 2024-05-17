@@ -1,5 +1,7 @@
 import kaboom from "kaboom"
-kaboom()
+kaboom({
+	background: [0, 0, 0]
+})
 
 loadSprite("bean", "/sprites/plane.png")
 loadSprite("bean20", "/sprites/plane_20.png")
@@ -7,19 +9,30 @@ loadSprite("bean-20", "/sprites/plane_-20.png")
 loadSound("score", "/sounds/score.mp3")
 loadSound("wooosh", "/sounds/wooosh.mp3")
 loadSound("hit", "/sounds/hit.mp3")
+loadSprite("background", "/sprites/city.png");
+// loadSprite("WTCbackground", "/sprites/WTO.png");
+loadSprite("WTCbackground", "/sprites/boom.png");
 
 // define gravity
 setGravity(3200)
 
-setBackground(141, 183, 255)
+// setBackground(141, 183, 255)
+
 
 scene("game", () => {
+
+	add([
+		sprite("background"),
+		pos(0, 0),
+		scale(width() / 1196, height() / 670), // Adjust the scale to fit the canvas size
+		z(-1) // Ensure it's behind other game objects
+	]);
 
 	const game = add([
 		timer(),
 	])
 
-	const PIPE_OPEN = 240
+	const PIPE_OPEN = 360
 	const PIPE_MIN = 100
 	const JUMP_FORCE = 800
 	const SPEED = 320
@@ -72,7 +85,7 @@ scene("game", () => {
 		play("wooosh")
 	})
 
-	let pipeSpawnDelay = 1.3; // Initial delay in seconds between pipe spawns
+	let pipeSpawnDelay = 1.5; // Initial delay in seconds between pipe spawns
 
 	function spawnPipe() {
 		// calculate pipe positions
@@ -187,6 +200,13 @@ scene("game", () => {
 scene("lose", (score) => {
 
 	add([
+		sprite("WTCbackground"),
+		pos(0, 0),
+		scale(width() / 1800, height() / 1200), // Adjust the scale to fit the canvas size
+		z(-1) // Ensure it's behind other game objects
+	]);
+
+	add([
 		sprite("bean"),
 		pos(width() / 2, height() / 2 - 108),
 		scale(0.5),
@@ -196,6 +216,7 @@ scene("lose", (score) => {
 	// display score
 	add([
 		text(score),
+		color(265, 155, 0),
 		pos(width() / 2, height() / 2 + 108),
 		scale(3),
 		anchor("center"),
@@ -207,6 +228,6 @@ scene("lose", (score) => {
 
 })
 
-debug.inspect = true
+// debug.inspect = true
 
 go("game")
