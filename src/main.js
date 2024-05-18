@@ -10,15 +10,13 @@ loadSound("score", "/sounds/score.mp3")
 loadSound("wooosh", "/sounds/wooosh.mp3")
 loadSound("hit", "/sounds/hit.mp3")
 loadSprite("background", "/sprites/city.png");
-// loadSprite("WTCbackground", "/sprites/WTO.png");
 loadSprite("WTCbackground", "/sprites/boom.png");
 loadSprite("building", "/sprites/buildin.png");
 loadSprite("buildingRotated", "/sprites/buildin-rotated.png");
 loadSound("hit", "/sounds/ollahuobkar.mp3")
+
 // define gravity
 setGravity(3200)
-
-// setBackground(141, 183, 255)
 
 
 scene("game", () => {
@@ -26,8 +24,8 @@ scene("game", () => {
 	add([
 		sprite("background"),
 		pos(0, 0),
-		scale(width() / 1196, height() / 670), // Adjust the scale to fit the canvas size
-		z(-1) // Ensure it's behind other game objects
+		scale(width() / 1196, height() / 670),
+		z(-1)
 	]);
 
 	const game = add([
@@ -53,12 +51,6 @@ scene("game", () => {
 			go("lose", score)
 		}
 	})
-
-	// jump
-	// onKeyPress("space", () => {
-	// 	bean.jump(JUMP_FORCE)
-	// 	play("wooosh")
-	// })
 
 	onKeyPress("space", () => {
 		bean.jump(JUMP_FORCE);
@@ -126,14 +118,7 @@ scene("game", () => {
 		spawnPipe();
 	});
 
-	// callback when bean onCollide with objects with tag "pipe"
-	// bean.onCollide("pipe", () => {
-	// 	go("lose", score)
-	// 	play("hit")
-	// 	addKaboom(bean.pos)
-	// })
 	bean.onCollide("pipe", () => {
-		// Pause the game
 		game.paused = true;
 		play("hit");
 		addKaboom(bean.pos);
@@ -151,11 +136,6 @@ scene("game", () => {
 			p.passed = true
 		}
 	})
-
-	// // spawn a pipe every 1 sec
-	// game.loop(1, () => {
-	// 	spawnPipe()
-	// })
 
 	let score = 0
 
@@ -211,12 +191,11 @@ scene("game", () => {
 })
 
 scene("lose", (score) => {
-
 	add([
 		sprite("WTCbackground"),
 		pos(0, 0),
-		scale(width() / 1800, height() / 1200), // Adjust the scale to fit the canvas size
-		z(-1) // Ensure it's behind other game objects
+		scale(width() / 1800, height() / 1200),
+		z(-1)
 	]);
 
 	add([
@@ -235,7 +214,6 @@ scene("lose", (score) => {
 		anchor("center"),
 	])
 
-	// go back to game with space is pressed
 	onKeyPress("space", () => go("game"))
 	onClick(() => go("game"))
 
